@@ -21,7 +21,9 @@ import java.util.regex.Pattern;
 public class JsTestDriverMojo extends AbstractMojo
 {
 
-    // Mojo Options
+    /**
+     * Mojo Options
+     */
 
     /** @parameter default-value="${project}" */
     private MavenProject mavenProject;
@@ -37,8 +39,10 @@ public class JsTestDriverMojo extends AbstractMojo
     private boolean skipTests;
 
 
-
-    // JsTD Options
+    /**
+     * JsTD Options:
+     *   These should be kept in step with the JsTD command line options.
+     */
 
     /**
      * @parameter expression="${jsTestDriver.config}" default-value="jsTestDriver.conf"
@@ -65,7 +69,6 @@ public class JsTestDriverMojo extends AbstractMojo
      */
     private boolean verbose;
 
-
     /**
      * @parameter expression="${jsTestDriver.testOutput}" default-value=""
      */
@@ -86,7 +89,7 @@ public class JsTestDriverMojo extends AbstractMojo
      */
     private String browser;
 
-    
+
 
     private boolean streamResults;
     private static final String GROUP_ID = "com.google.jstestdriver";
@@ -107,6 +110,7 @@ public class JsTestDriverMojo extends AbstractMojo
         logProcessArguments(jarConfig);
 
         String output = ProcessUtils.run(jarConfig, streamResults);
+        printResults(output);
 
         new ResultsProcessor().processResults(output);
     }
@@ -179,6 +183,11 @@ public class JsTestDriverMojo extends AbstractMojo
                 "-------------------------------------------\n" +
                 " J S  T E S T  D R I V E R                 \n" +
                 "-------------------------------------------\n");
+    }
+
+    private void printResults(String output)
+    {
+        System.out.println(output);
     }
 
 }
