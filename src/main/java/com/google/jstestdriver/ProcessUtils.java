@@ -1,13 +1,16 @@
 package com.google.jstestdriver;
 
+import org.apache.maven.plugin.MojoExecutionException;
+
 import java.io.IOException;
 import java.io.Closeable;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.InputStream;
+import java.util.regex.Matcher;
 
 /**
- * Copyright © 2010, Burke Webster (burke.webster@gmail.com)
+ * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
  **/
 public class ProcessUtils
 {
@@ -30,6 +33,36 @@ public class ProcessUtils
                 }
                 process.destroy();
             }
+        }
+    }
+
+    public static String run(JarProcessConfiguration jarConfig, boolean streamResults) throws MojoExecutionException
+    {
+        StringBuffer buffer = new StringBuffer();
+        try
+        {
+            Process process = ProcessFactory.create(jarConfig);
+            BufferedReader processInputStreamReader = ProcessUtils.getInputStream(process);
+            for (String line = processInputStreamReader.readLine(); line != null; line = processInputStreamReader.readLine())
+            {
+                if (streamResults)
+                {
+                    System.out.println(line);
+                }
+                buffer.append(line).append("\n");
+            }
+
+            process.waitFor();
+
+            return buffer.toString();
+        }
+        catch (IOException e)
+        {
+            throw new MojoExecutionException(e.getMessage());
+        }
+        catch (InterruptedException e)
+        {
+            throw new MojoExecutionException(e.getMessage());
         }
     }
 

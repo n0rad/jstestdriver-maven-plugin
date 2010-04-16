@@ -13,8 +13,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Copyright © 2010, Burke Webster (burke.webster@gmail.com)
- * 
+ * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
+ *
  * @requiresDependencyResolution test
  * @goal test
  **/
@@ -86,11 +86,12 @@ public class JsTestDriverMojo extends AbstractMojo
      */
     private String browser;
 
+    
 
+    private boolean streamResults;
     private static final String GROUP_ID = "com.google.jstestdriver";
     private static final String ARTIFACT_ID = "jstestdriver";
-    private static final String RESULTS_START_REGEXP = "Total ([0-9]+) tests \\(Passed: ([0-9]+); Fails: ([0-9]+); Errors: ([0-9]+)\\).*";
-    private static final String NO_BROWSERS_CAPTURED_REGEXP = "No browsers were captured.*";
+
 
     public void execute() throws MojoExecutionException
     {
@@ -102,64 +103,30 @@ public class JsTestDriverMojo extends AbstractMojo
 
         printBanner();
 
-        JarApplication testRunner = buildRunner();
-        addArguments(testRunner);
-        logProcessArguments(testRunner);
+        JarProcessConfiguration jarConfig = buildProcessConfiguration();
+        logProcessArguments(jarConfig);
 
-        Pattern pattern = Pattern.compile(RESULTS_START_REGEXP);
-        StringBuffer buffer = new StringBuffer();
-        boolean foundStartOfResults = false;
-        TestRunnerResults testRunnerResults = null;
-        try
-        {
-            Process process = ProcessFactory.create(testRunner);
-            BufferedReader processInputStreamReader = ProcessUtils.getInputStream(process);
-            for (String line = processInputStreamReader.readLine(); line != null; line = processInputStreamReader.readLine())
-            {
-                if (debug)
-                {
-                    System.out.println(line);
-                }
+        String output = ProcessUtils.run(jarConfig, streamResults);
 
-                if (line.matches(NO_BROWSERS_CAPTURED_REGEXP))
-                {
-                    throw new MojoExecutionException("Unable to capture any browsers");
-                }
-
-                Matcher matcher = pattern.matcher(line);
-                if (matcher.matches())
-                {
-                    foundStartOfResults = true;
-                    testRunnerResults = TestRunnerResults.buildResultsFromMatcher(matcher);
-                }
-
-                if (foundStartOfResults)
-                {
-                    buffer.append(line).append("\n");
-                }
-            }
-
-            process.waitFor();
-
-            printResults(buffer);
-            processResults(testRunnerResults);
-        }
-        catch (IOException e)
-        {
-            throw new MojoExecutionException(e.getMessage());
-        }
-        catch (InterruptedException e)
-        {
-            throw new MojoExecutionException(e.getMessage());
-        }
+        new ResultsProcessor().processResults(output);
     }
 
-    private void addArguments(JarApplication testRunner)
+    private JarProcessConfiguration buildProcessConfiguration()
+            throws MojoExecutionException
+    {
+        Artifact artifact = new ArtifactLocator(mavenProject).findArtifact(GROUP_ID, ARTIFACT_ID);
+        JarProcessConfiguration jarConfig = new JarProcessConfiguration(artifact.getFile().getAbsolutePath());
+        addArguments(jarConfig);
+        return jarConfig;
+    }
+
+    private void addArguments(JarProcessConfiguration testRunner)
             throws MojoExecutionException
     {
         if (StringUtils.isNotEmpty(port))
         {
             testRunner.addArgument("--port", port);
+            streamResults = true;
         }
         else
         {
@@ -186,7 +153,7 @@ public class JsTestDriverMojo extends AbstractMojo
             {
                 if (testOutput != null && !testOutput.equals("."))
                 {
-                    makeDirectoryIfNotExists();
+                    FileUtils.makeDirectoryIfNotExists(testOutput);
                 }
                 testRunner.addArgument("--testOutput", testOutput);
             }
@@ -198,76 +165,11 @@ public class JsTestDriverMojo extends AbstractMojo
         }
     }
 
-    private void makeDirectoryIfNotExists()
-            throws MojoExecutionException
-    {
-        // we need to ensure this directory exists
-        File directory = new File(testOutput);
-        if (!directory.exists())
-        {
-            if (!directory.mkdirs())
-            {
-                throw new MojoExecutionException("Failed to create testOutput directory");
-            }
-        }
-    }
-
-    private void logProcessArguments(JarApplication processedArgs)
+    private void logProcessArguments(JarProcessConfiguration processedArgs)
     {
         if (debug)
         {
             System.out.println("Running: " + StringUtils.join(processedArgs.getArguments(), " "));
-        }
-    }
-
-    private JarApplication buildRunner() throws MojoExecutionException
-    {
-        for (Object object : mavenProject.getArtifacts())
-        {
-            Artifact artifact = (Artifact) object;
-            if (artifact.getGroupId().equals(GROUP_ID) && artifact.getArtifactId().equals(ARTIFACT_ID))
-            {
-                return new JarApplication(artifact.getFile().getAbsolutePath());
-            }
-        }
-
-        throw new MojoExecutionException(String.format("Failed to find %s:%s", GROUP_ID, ARTIFACT_ID));
-    }
-
-    private void printResults(StringBuffer buffer)
-    {
-        if (!debug)
-        {
-            System.out.println(buffer.toString());
-        }
-    }
-
-    private void processResults(TestRunnerResults testRunnerResults)
-            throws MojoExecutionException
-    {
-        if (testRunnerResults == null || testRunnerResults.hasFailures())
-        {
-            StringBuffer errorString = new StringBuffer();
-            errorString.append("Test failure:");
-            if (testRunnerResults == null)
-            {
-                errorString.append(" unable to parse results");
-            }
-            else
-            {
-                int errors = testRunnerResults.getTotalTestsErrored();
-                int failures = testRunnerResults.getTotalTestsFailed();
-                if (errors > 0)
-                {
-                    errorString.append(" ").append(errors).append(" errors.");
-                }
-                if (failures > 0)
-                {
-                    errorString.append(" ").append(failures).append(" failures.");
-                }
-            }
-
-            throw new MojoExecutionException(errorString.toString());
         }
     }
 

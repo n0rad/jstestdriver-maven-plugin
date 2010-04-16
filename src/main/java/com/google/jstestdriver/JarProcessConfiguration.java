@@ -5,20 +5,17 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Copyright © 2010, Burke Webster (burke.webster@gmail.com)
+ * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
  **/
-public class JarApplication
+public class JarProcessConfiguration
 {
-    private String jarPath;
     private List<String> arguments;
 
-    public JarApplication(String jarPath)
+    public JarProcessConfiguration(String jarPath)
     {
-        this.jarPath = jarPath;
-
         arguments = new ArrayList<String>();
-        arguments.add("java");
-        this.addArgument("-jar", this.jarPath);
+        arguments.add("-jar");
+        arguments.add(jarPath);
     }
 
     public void addArgument(String... values)
@@ -29,5 +26,10 @@ public class JarApplication
     public List<String> getArguments()
     {
         return arguments;
+    }
+
+    public String getExecutable()
+    {
+        return "java";
     }
 }

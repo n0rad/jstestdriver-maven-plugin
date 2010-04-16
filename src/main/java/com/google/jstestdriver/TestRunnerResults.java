@@ -3,7 +3,7 @@ package com.google.jstestdriver;
 import java.util.regex.Matcher;
 
 /**
- * Copyright © 2010, Burke Webster (burke.webster@gmail.com)
+ * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
  **/
 public class TestRunnerResults
 {

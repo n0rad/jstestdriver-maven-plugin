@@ -1,18 +1,21 @@
 package com.google.jstestdriver;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Copyright © 2010, Burke Webster (burke.webster@gmail.com)
+ * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
  **/
 public class ProcessFactory
 {
-    public static Process create(JarApplication runner) throws IOException
+    public static Process create(JarProcessConfiguration configuration) throws IOException
     {
-        List<String> processArgs = runner.getArguments();
+        List<String> commandLine = new ArrayList<String>();
+        commandLine.add(configuration.getExecutable());
+        commandLine.addAll(configuration.getArguments());
 
-        ProcessBuilder pb = new ProcessBuilder(processArgs);
+        ProcessBuilder pb = new ProcessBuilder(commandLine);
         pb.redirectErrorStream(true);
         return pb.start();
     }
