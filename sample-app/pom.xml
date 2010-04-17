@@ -57,6 +57,8 @@
                                 <configuration>
                                     <debug>true</debug>
                                     <config>src/test/resources/jsTestDriver.conf</config>
+                                    <browser>open</browser>
+                                    <port>9876</port>
                                 </configuration>
                             </execution>
                         </executions>
