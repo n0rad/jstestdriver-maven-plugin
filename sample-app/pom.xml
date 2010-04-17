@@ -1,0 +1,71 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.google.jstestdriver</groupId>
+    <artifactId>sample-app</artifactId>
+    <packaging>war</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>JsTD Maven Plugin Sample App</name>
+    <url>http://code.google.com/p/jstd-maven-plugin</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.jstestdriver</groupId>
+            <artifactId>jstestdriver</artifactId>
+            <version>1.2.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.jstestdriver</groupId>
+            <artifactId>maven-jstestdriver-plugin</artifactId>
+            <version>1.2.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>sample-app</finalName>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>jstests</id>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.4.2</version>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>com.google.jstestdriver</groupId>
+                        <artifactId>maven-jstestdriver-plugin</artifactId>
+                        <version>1.2.1-SNAPSHOT</version>
+                        <executions>
+                            <execution>
+                                <id>run-tests</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <debug>true</debug>
+                                    <config>src/test/resources/jsTestDriver.conf</config>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+
+            </build>
+        </profile>
+    </profiles>
+
+</project>

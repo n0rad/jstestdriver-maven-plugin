@@ -90,8 +90,6 @@ public class JsTestDriverMojo extends AbstractMojo
     private String browser;
 
 
-
-    private boolean streamResults;
     private static final String GROUP_ID = "com.google.jstestdriver";
     private static final String ARTIFACT_ID = "jstestdriver";
 
@@ -109,7 +107,7 @@ public class JsTestDriverMojo extends AbstractMojo
         JarProcessConfiguration jarConfig = buildProcessConfiguration();
         logProcessArguments(jarConfig);
 
-        String output = ProcessUtils.run(jarConfig, streamResults);
+        String output = ProcessUtils.run(jarConfig, true);
         printResults(output);
 
         new ResultsProcessor().processResults(output);
@@ -127,42 +125,37 @@ public class JsTestDriverMojo extends AbstractMojo
     private void addArguments(JarProcessConfiguration testRunner)
             throws MojoExecutionException
     {
+        testRunner.addArgument("--config", config);
+        testRunner.addArgument("--tests", tests);
+
+        if (captureConsole)
+        {
+            testRunner.addArgument("--captureConsole");
+        }
+        if (reset)
+        {
+            testRunner.addArgument("--reset");
+        }
         if (StringUtils.isNotEmpty(port))
         {
             testRunner.addArgument("--port", port);
-            streamResults = true;
         }
-        else
+        if (StringUtils.isNotEmpty(server))
         {
-            testRunner.addArgument("--config", config);
-            testRunner.addArgument("--tests", tests);
-
-            if (captureConsole)
-            {
-                testRunner.addArgument("--captureConsole");
-            }
-            if (reset)
-            {
-                testRunner.addArgument("--reset");
-            }
-            if (StringUtils.isNotEmpty(server))
-            {
-                testRunner.addArgument("--server", server);
-            }
-            if (StringUtils.isNotEmpty(browser))
-            {
-                testRunner.addArgument("--browser", browser);
-            }
-            if (StringUtils.isNotEmpty(testOutput))
-            {
-                if (testOutput != null && !testOutput.equals("."))
-                {
-                    FileUtils.makeDirectoryIfNotExists(testOutput);
-                }
-                testRunner.addArgument("--testOutput", testOutput);
-            }
+            testRunner.addArgument("--server", server);
         }
-
+        if (StringUtils.isNotEmpty(browser))
+        {
+            testRunner.addArgument("--browser", browser);
+        }
+        if (StringUtils.isNotEmpty(testOutput))
+        {
+            if (testOutput != null && !testOutput.equals("."))
+            {
+                FileUtils.makeDirectoryIfNotExists(testOutput);
+            }
+            testRunner.addArgument("--testOutput", testOutput);
+        }
         if (verbose)
         {
             testRunner.addArgument("--verbose");
