@@ -99,7 +99,6 @@ public class JsTestDriverMojo extends AbstractMojo
         logProcessArguments(jarConfig);
 
         String output = new StreamingProcessExecutor().execute(jarConfig);
-        printResults(output);
 
         new ResultsProcessor().processResults(output);
     }
@@ -167,10 +166,4 @@ public class JsTestDriverMojo extends AbstractMojo
                 " J S  T E S T  D R I V E R                 \n" +
                 "-------------------------------------------\n");
     }
-
-    private void printResults(String output)
-    {
-        System.out.println(output);
-    }
-
 }
