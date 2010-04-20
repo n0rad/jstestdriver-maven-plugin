@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 /**
  * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
- **/
+ */
 public class ResultsProcessor
 {
     private static final String RESULTS_START_REGEXP = "Total ([0-9]+) tests \\(Passed: ([0-9]+); Fails: ([0-9]+); Errors: ([0-9]+)\\).*";
@@ -43,8 +43,7 @@ public class ResultsProcessor
         }
     }
 
-    private TestRunnerResults extractResults(String output)
-            throws MojoExecutionException
+    private TestRunnerResults extractResults(String output) throws MojoExecutionException
     {
         Pattern pattern = Pattern.compile(RESULTS_START_REGEXP);
 

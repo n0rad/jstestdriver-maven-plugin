@@ -6,15 +6,17 @@ import java.util.List;
 
 /**
  * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
- **/
-public class JarProcessConfiguration
+ */
+public class JarProcessConfiguration implements ProcessConfiguration
 {
     private List<String> arguments;
+    private static final String JAVA_ARG = "java";
+    private static final String JAR_ARG = "-jar";
 
     public JarProcessConfiguration(String jarPath)
     {
         arguments = new ArrayList<String>();
-        arguments.add("-jar");
+        arguments.add(JAR_ARG);
         arguments.add(jarPath);
     }
 
@@ -30,6 +32,6 @@ public class JarProcessConfiguration
 
     public String getExecutable()
     {
-        return "java";
+        return JAVA_ARG;
     }
 }

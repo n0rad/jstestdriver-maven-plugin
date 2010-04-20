@@ -1,8 +1,11 @@
 package com.google.jstestdriver;
 
-import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
+import org.testng.annotations.Test;
 
+/**
+ * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
+ */
 @Test
 public class UrlBuilderTest
 {

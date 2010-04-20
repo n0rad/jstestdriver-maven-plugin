@@ -6,18 +6,12 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
  *
  * @requiresDependencyResolution test
  * @goal test
- **/
+ */
 public class JsTestDriverMojo extends AbstractMojo
 {
 
@@ -25,13 +19,10 @@ public class JsTestDriverMojo extends AbstractMojo
      * Mojo Options
      */
 
-    /** @parameter default-value="${project}" */
-    private MavenProject mavenProject;
-
     /**
-     * @parameter expression="${jsTestDriver.debug}" default-value=false
+     * @parameter default-value="${project}"
      */
-    private boolean debug;
+    private MavenProject mavenProject;
 
     /**
      * @parameter expression="${skipTests}" default-value=false
@@ -46,17 +37,17 @@ public class JsTestDriverMojo extends AbstractMojo
 
     /**
      * @parameter expression="${jsTestDriver.config}" default-value="jsTestDriver.conf"
-     **/
+     */
     private String config;
 
     /**
      * @parameter expression="${jsTestDriver.captureConsole}" default-value=true
-     **/
+     */
     private boolean captureConsole;
 
     /**
      * @parameter expression="${jsTestDriver.reset}" default-value=false
-     **/
+     */
     private boolean reset;
 
     /**
@@ -107,7 +98,7 @@ public class JsTestDriverMojo extends AbstractMojo
         JarProcessConfiguration jarConfig = buildProcessConfiguration();
         logProcessArguments(jarConfig);
 
-        String output = ProcessUtils.run(jarConfig, true);
+        String output = new StreamingProcessExecutor().execute(jarConfig);
         printResults(output);
 
         new ResultsProcessor().processResults(output);
@@ -118,11 +109,11 @@ public class JsTestDriverMojo extends AbstractMojo
     {
         Artifact artifact = new ArtifactLocator(mavenProject).findArtifact(GROUP_ID, ARTIFACT_ID);
         JarProcessConfiguration jarConfig = new JarProcessConfiguration(artifact.getFile().getAbsolutePath());
-        addArguments(jarConfig);
+        buildArguments(jarConfig);
         return jarConfig;
     }
 
-    private void addArguments(JarProcessConfiguration testRunner)
+    private void buildArguments(JarProcessConfiguration testRunner)
             throws MojoExecutionException
     {
         testRunner.addArgument("--config", config);
@@ -162,12 +153,11 @@ public class JsTestDriverMojo extends AbstractMojo
         }
     }
 
-    private void logProcessArguments(JarProcessConfiguration processedArgs)
+    private void logProcessArguments(ProcessConfiguration processedArgs)
     {
-        if (debug)
-        {
-            System.out.println("Running: " + StringUtils.join(processedArgs.getArguments(), " "));
-        }
+        System.out.println(String.format("Running: %s %s",
+                processedArgs.getExecutable(),
+                StringUtils.join(processedArgs.getArguments(), " ")));
     }
 
     private void printBanner()

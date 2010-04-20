@@ -1,12 +1,11 @@
 package com.google.jstestdriver;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
 /**
  * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
- **/
+ */
 public class ArtifactLocator
 {
     private MavenProject project;
@@ -16,7 +15,7 @@ public class ArtifactLocator
         this.project = project;
     }
 
-    public Artifact findArtifact(String groupId, String artifactId) throws MojoExecutionException
+    public Artifact findArtifact(String groupId, String artifactId)
     {
         for (Object object : project.getArtifacts())
         {
@@ -27,6 +26,6 @@ public class ArtifactLocator
             }
         }
 
-        throw new MojoExecutionException(String.format("Failed to locate %s:%s", groupId, artifactId));
+        throw new RuntimeException(String.format("Failed to locate %s:%s", groupId, artifactId));
     }
 }

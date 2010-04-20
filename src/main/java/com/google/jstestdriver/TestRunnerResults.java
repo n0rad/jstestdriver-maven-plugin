@@ -4,10 +4,10 @@ import java.util.regex.Matcher;
 
 /**
  * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
- **/
+ */
 public class TestRunnerResults
 {
-    private  int totalTestsRun;
+    private int totalTestsRun;
     private int totalTestsPassed;
     private int totalTestsFailed;
     private int totalTestsErrored;
@@ -23,10 +23,10 @@ public class TestRunnerResults
     public static TestRunnerResults buildResultsFromMatcher(Matcher matcher)
     {
         return new TestRunnerResults(
-            Integer.parseInt(matcher.group(1)),
-            Integer.parseInt(matcher.group(2)),
-            Integer.parseInt(matcher.group(3)),
-            Integer.parseInt(matcher.group(4)));
+                Integer.parseInt(matcher.group(1)),
+                Integer.parseInt(matcher.group(2)),
+                Integer.parseInt(matcher.group(3)),
+                Integer.parseInt(matcher.group(4)));
     }
 
     public boolean hasFailures()
