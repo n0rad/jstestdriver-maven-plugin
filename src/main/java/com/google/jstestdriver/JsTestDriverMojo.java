@@ -7,7 +7,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -107,6 +106,8 @@ public class JsTestDriverMojo extends AbstractMojo
 
     public void execute() throws MojoExecutionException
     {
+        MojoLogger.bindLog(getLog());
+
         if (skipTests)
         {
             getLog().info("Tests are skipped.");
