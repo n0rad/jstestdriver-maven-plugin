@@ -11,11 +11,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.google.jstestdriver</groupId>
-            <artifactId>jstestdriver</artifactId>
-            <version>1.2.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
             <version>3.0-alpha-1</version>
@@ -52,6 +47,13 @@
             <artifactId>mockito-all</artifactId>
             <version>1.8.4</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- jstestdriver deps -->
+        <dependency>
+            <groupId>com.google.jstestdriver</groupId>
+            <artifactId>jstestdriver</artifactId>
+            <version>1.2.1</version>
         </dependency>
     </dependencies>
 

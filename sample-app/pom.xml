@@ -12,12 +12,6 @@
     <dependencies>
         <dependency>
             <groupId>com.google.jstestdriver</groupId>
-            <artifactId>jstestdriver</artifactId>
-            <version>1.2.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.jstestdriver</groupId>
             <artifactId>maven-jstestdriver-plugin</artifactId>
             <version>1.2.1-SNAPSHOT</version>
             <scope>test</scope>
@@ -29,6 +23,7 @@
     </build>
 
     <profiles>
+
         <profile>
             <id>jstests</id>
             <build>
@@ -55,8 +50,6 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
-                                    <debug>true</debug>
-                                    <config>src/test/resources/jsTestDriver.conf</config>
                                     <browser>open</browser>
                                     <port>9876</port>
                                 </configuration>
