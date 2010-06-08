@@ -6,6 +6,9 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
  *
@@ -25,9 +28,24 @@ public class JsTestDriverMojo extends AbstractMojo
     private MavenProject mavenProject;
 
     /**
+     * @parameter expression="${plugin.artifacts}"
+     */
+    private List<Artifact> dependencies;
+
+    /**
      * @parameter expression="${skipTests}" default-value=false
      */
     private boolean skipTests;
+
+    /**
+     * @parameter expression="${jsTestDriver.artifactId}" default-value="jstestdriver"
+     */
+    private String artifactId;
+
+    /**
+     * @parameter expression="${jsTestDriver.groupdId}" default-value="com.google.jstestdriver"
+     */
+    private String groupId;
 
 
     /**
@@ -36,7 +54,12 @@ public class JsTestDriverMojo extends AbstractMojo
      */
 
     /**
-     * @parameter expression="${jsTestDriver.config}" default-value="jsTestDriver.conf"
+     * @parameter expression="${jsTestDriver.jar}" default-value=""
+     */
+    private String jar;
+
+    /**
+     * @parameter expression="${jsTestDriver.config}" default-value="src/test/resources/jsTestDriver.conf"
      */
     private String config;
 
@@ -81,12 +104,10 @@ public class JsTestDriverMojo extends AbstractMojo
     private String browser;
 
 
-    private static final String GROUP_ID = "com.google.jstestdriver";
-    private static final String ARTIFACT_ID = "jstestdriver";
-
-
     public void execute() throws MojoExecutionException
     {
+        MojoLogger.bindLog(getLog());
+
         if (skipTests)
         {
             getLog().info("Tests are skipped.");
@@ -95,21 +116,54 @@ public class JsTestDriverMojo extends AbstractMojo
 
         printBanner();
 
-        JarProcessConfiguration jarConfig = buildProcessConfiguration();
-        logProcessArguments(jarConfig);
+        ProcessConfiguration config = buildProcessConfiguration();
+        logProcessArguments(config);
 
-        String output = new StreamingProcessExecutor().execute(jarConfig);
+        String output = new StreamingProcessExecutor().execute(config);
 
         new ResultsProcessor().processResults(output);
     }
 
-    private JarProcessConfiguration buildProcessConfiguration()
+    private ProcessConfiguration buildProcessConfiguration()
             throws MojoExecutionException
     {
-        Artifact artifact = new ArtifactLocator(mavenProject).findArtifact(GROUP_ID, ARTIFACT_ID);
-        JarProcessConfiguration jarConfig = new JarProcessConfiguration(artifact.getFile().getAbsolutePath());
-        buildArguments(jarConfig);
+        ProcessConfiguration configuration;
+        if (StringUtils.isNotEmpty(jar))
+        {
+            configuration = buildLocalJarProcessConfig();
+        }
+        else
+        {
+            configuration = buildMavenJarProcessConfig();
+        }
+
+        buildArguments((JarProcessConfiguration) configuration);
+
+        return configuration;
+    }
+
+    private ProcessConfiguration buildMavenJarProcessConfig() throws MojoExecutionException
+    {
+        Artifact artifact = new ArtifactLocator(mavenProject).findArtifact(groupId, artifactId);
+        ProcessConfiguration jarConfig = new JarProcessConfiguration(artifact.getFile().getAbsolutePath());
+        addClasspathArguments((JarProcessConfiguration) jarConfig);
         return jarConfig;
+    }
+
+    private ProcessConfiguration buildLocalJarProcessConfig() throws MojoExecutionException
+    {
+        return new JarProcessConfiguration(jar);
+    }
+
+    private void addClasspathArguments(JarProcessConfiguration jarConfig)
+    {
+        List<String> classpathArgs = new ArrayList<String>();
+        for (Artifact artifact : dependencies)
+        {
+            classpathArgs.add(artifact.getFile().getAbsolutePath());
+        }
+
+        jarConfig.addClasspath(StringUtils.join(classpathArgs, ";"));
     }
 
     private void buildArguments(JarProcessConfiguration testRunner)
@@ -154,9 +208,11 @@ public class JsTestDriverMojo extends AbstractMojo
 
     private void logProcessArguments(ProcessConfiguration processedArgs)
     {
-        System.out.println(String.format("Running: %s %s",
-                processedArgs.getExecutable(),
-                StringUtils.join(processedArgs.getArguments(), " ")));
+        if (verbose) {
+            System.out.println(String.format("Running: %s %s",
+                                             processedArgs.getExecutable(),
+                                             StringUtils.join(processedArgs.getArguments(), " ")));
+        }
     }
 
     private void printBanner()

@@ -23,6 +23,7 @@
     </build>
 
     <profiles>
+
         <profile>
             <id>jstests</id>
             <build>
@@ -49,8 +50,6 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
-                                    <debug>true</debug>
-                                    <config>src/test/resources/jsTestDriver.conf</config>
                                     <browser>open</browser>
                                     <port>9876</port>
                                 </configuration>
@@ -65,7 +64,7 @@
     </profiles>
 
     <repositories>
-        <repository>
+         <repository>
             <id>jstd-maven-plugin-repo</id>
             <name>jstd maven plugin repo</name>
             <url>http://jstd-maven-plugin.googlecode.com/svn/repo</url>

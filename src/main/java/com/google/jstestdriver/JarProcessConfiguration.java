@@ -10,14 +10,16 @@ import java.util.List;
 public class JarProcessConfiguration implements ProcessConfiguration
 {
     private List<String> arguments;
+    private List<String> classpath;
+    private String jarPath;
     private static final String JAVA_ARG = "java";
     private static final String JAR_ARG = "-jar";
 
     public JarProcessConfiguration(String jarPath)
     {
+        this.jarPath = jarPath;
         arguments = new ArrayList<String>();
-        arguments.add(JAR_ARG);
-        arguments.add(jarPath);
+        classpath = new ArrayList<String>();
     }
 
     public void addArgument(String... values)
@@ -25,9 +27,26 @@ public class JarProcessConfiguration implements ProcessConfiguration
         arguments.addAll(Arrays.asList(values));
     }
 
+    public void addClasspath(String... values)
+    {
+        classpath.addAll(Arrays.asList(values));
+    }
+
     public List<String> getArguments()
     {
-        return arguments;
+        List<String> allArguments = new ArrayList<String>();
+
+        if (!classpath.isEmpty())
+        {
+            allArguments.add("-classpath");
+            allArguments.addAll(classpath);
+        }
+
+        allArguments.add(JAR_ARG);
+        allArguments.add(jarPath);
+
+        allArguments.addAll(arguments);
+        return allArguments;
     }
 
     public String getExecutable()
