@@ -66,7 +66,8 @@
 
     <repositories>
         <repository>
-            <id>jstd-maven-plugin google code repo</id>
+            <id>jstd-maven-plugin-repo</id>
+            <name>jstd maven plugin repo</name>
             <url>http://jstd-maven-plugin.googlecode.com/svn/repo</url>
         </repository>
     </repositories>
