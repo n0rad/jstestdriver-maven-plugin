@@ -85,12 +85,17 @@
             <name>Java.net Repository for Maven</name>
             <url>http://download.java.net/maven/2/</url>
         </repository>
+        <repository>
+            <id>jstd-maven-plugin-repo</id>
+            <name>jstd maven plugin repo</name>
+            <url>http://jstd-maven-plugin.googlecode.com/svn/repo</url>
+        </repository>
     </repositories>
 
     <distributionManagement>
         <repository>
             <uniqueVersion>false</uniqueVersion>
-            <id>jstd-maven-plugin google code repo</id>
+            <id>jstd-maven-plugin-repo</id>
             <url>svn:https://jstd-maven-plugin.googlecode.com/svn/repo</url>
         </repository>
     </distributionManagement>

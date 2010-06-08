@@ -138,7 +138,7 @@ public class JsTestDriverMojo extends AbstractMojo
         }
 
         buildArguments((JarProcessConfiguration) configuration);
-        
+
         return configuration;
     }
 
@@ -160,7 +160,6 @@ public class JsTestDriverMojo extends AbstractMojo
         List<String> classpathArgs = new ArrayList<String>();
         for (Artifact artifact : dependencies)
         {
-            System.out.println(" + " + artifact.getFile().getAbsolutePath());
             classpathArgs.add(artifact.getFile().getAbsolutePath());
         }
 
@@ -209,9 +208,11 @@ public class JsTestDriverMojo extends AbstractMojo
 
     private void logProcessArguments(ProcessConfiguration processedArgs)
     {
-        System.out.println(String.format("Running: %s %s",
-                                         processedArgs.getExecutable(),
-                                         StringUtils.join(processedArgs.getArguments(), " ")));
+        if (verbose) {
+            System.out.println(String.format("Running: %s %s",
+                                             processedArgs.getExecutable(),
+                                             StringUtils.join(processedArgs.getArguments(), " ")));
+        }
     }
 
     private void printBanner()
