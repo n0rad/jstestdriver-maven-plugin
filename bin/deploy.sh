@@ -1,6 +1,7 @@
 #!/bin/sh
 
-JAR_FILE=$1
+VERSION=$1
+JAR_FILE=jstestdriver-$VERSION.jar
 
 echo "Deploying $JAR_FILE"
 
@@ -10,5 +11,5 @@ mvn -e deploy:deploy-file \
   -Dfile=$JAR_FILE \
   -DgroupId=com.google.jstestdriver \
   -DartifactId=jstestdriver \
-  -Dversion=1.2.1 \
+  -Dversion=$VERSION \
   -Dpackaging=jar
