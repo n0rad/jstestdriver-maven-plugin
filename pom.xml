@@ -11,7 +11,6 @@
 
     <properties>
         <maven.plugin.dev.api.version>3.0-alpha-1</maven.plugin.dev.api.version>
-        <jstd.maven.plugin.repo>http://jstd-maven-plugin.googlecode.com/svn/repo</jstd.maven.plugin.repo>
     </properties>
 
     <dependencies>
@@ -99,7 +98,7 @@
         <repository>
             <id>jstd-maven-plugin-repo</id>
             <name>jstd maven plugin repo</name>
-            <url>${jstd.maven.plugin.repo}</url>
+            <url>http://jstd-maven-plugin.googlecode.com/svn/repo</url>
         </repository>
     </repositories>
 
@@ -107,7 +106,7 @@
         <repository>
             <uniqueVersion>false</uniqueVersion>
             <id>jstd-maven-plugin-repo</id>
-            <url>svn:${jstd.maven.plugin.repo}</url>
+            <url>svn:https://jstd-maven-plugin.googlecode.com/svn/repo</url>
         </repository>
     </distributionManagement>
 
