@@ -13,7 +13,7 @@
         <dependency>
             <groupId>com.google.jstestdriver</groupId>
             <artifactId>maven-jstestdriver-plugin</artifactId>
-            <version>1.2.1-SNAPSHOT</version>
+            <version>1.2.2-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -23,7 +23,6 @@
     </build>
 
     <profiles>
-
         <profile>
             <id>jstests</id>
             <build>
@@ -41,7 +40,7 @@
                     <plugin>
                         <groupId>com.google.jstestdriver</groupId>
                         <artifactId>maven-jstestdriver-plugin</artifactId>
-                        <version>1.2.1-SNAPSHOT</version>
+                        <version>1.2.2-SNAPSHOT</version>
                         <executions>
                             <execution>
                                 <id>run-tests</id>
@@ -50,8 +49,12 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
+                                    <!-- You might need to adjust this depending on your OS.  On Mac,
+                                    this will launch Safari -->
                                     <browser>open</browser>
+
                                     <port>9876</port>
+                                    <basePath>src</basePath>
                                 </configuration>
                             </execution>
                         </executions>
@@ -64,7 +67,7 @@
     </profiles>
 
     <repositories>
-         <repository>
+        <repository>
             <id>jstd-maven-plugin-repo</id>
             <name>jstd maven plugin repo</name>
             <url>http://jstd-maven-plugin.googlecode.com/svn/repo</url>

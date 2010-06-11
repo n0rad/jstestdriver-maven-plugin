@@ -5,26 +5,16 @@
     <name>maven-jstestdriver-plugin Maven Mojo</name>
     <groupId>com.google.jstestdriver</groupId>
     <artifactId>maven-jstestdriver-plugin</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.2.2-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <url>http://code.google.com/jstd-maven-plugin</url>
 
+    <properties>
+        <maven.plugin.dev.api.version>3.0-alpha-1</maven.plugin.dev.api.version>
+        <jstd.maven.plugin.repo>http://jstd-maven-plugin.googlecode.com/svn/repo</jstd.maven.plugin.repo>
+    </properties>
+
     <dependencies>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>3.0-alpha-1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.artifact</groupId>
-            <artifactId>maven-artifact</artifactId>
-            <version>3.0-alpha-1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-project</artifactId>
-            <version>3.0-alpha-1</version>
-        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -36,24 +26,45 @@
             <version>2.5</version>
         </dependency>
         <dependency>
+            <groupId>com.google.jstestdriver</groupId>
+            <artifactId>jstestdriver</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>${maven.plugin.dev.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.artifact</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>${maven.plugin.dev.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>${maven.plugin.dev.api.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>5.8</version>
             <scope>test</scope>
             <classifier>jdk15</classifier>
         </dependency>
+
+        <!-- test deps -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.8.4</version>
             <scope>test</scope>
-        </dependency>
-
-        <!-- jstestdriver deps -->
-        <dependency>
-            <groupId>com.google.jstestdriver</groupId>
-            <artifactId>jstestdriver</artifactId>
-            <version>1.2.1</version>
         </dependency>
     </dependencies>
 
@@ -88,7 +99,7 @@
         <repository>
             <id>jstd-maven-plugin-repo</id>
             <name>jstd maven plugin repo</name>
-            <url>http://jstd-maven-plugin.googlecode.com/svn/repo</url>
+            <url>${jstd.maven.plugin.repo}</url>
         </repository>
     </repositories>
 
@@ -96,7 +107,7 @@
         <repository>
             <uniqueVersion>false</uniqueVersion>
             <id>jstd-maven-plugin-repo</id>
-            <url>svn:https://jstd-maven-plugin.googlecode.com/svn/repo</url>
+            <url>svn:${jstd.maven.plugin.repo}</url>
         </repository>
     </distributionManagement>
 

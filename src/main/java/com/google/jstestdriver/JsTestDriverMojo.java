@@ -17,7 +17,6 @@ import java.util.List;
  */
 public class JsTestDriverMojo extends AbstractMojo
 {
-
     /**
      * Mojo Options
      */
@@ -47,6 +46,12 @@ public class JsTestDriverMojo extends AbstractMojo
      */
     private String groupId;
 
+    /**
+     * @parameter expression="${jsTestDriver.jar}" default-value=""
+     */
+    private String jar;
+
+
 
     /**
      * JsTD Options:
@@ -54,14 +59,25 @@ public class JsTestDriverMojo extends AbstractMojo
      */
 
     /**
-     * @parameter expression="${jsTestDriver.jar}" default-value=""
+     * @parameter expression="${jsTestDriver.basePath}" default-value=""
      */
-    private String jar;
+    private String basePath;
 
     /**
-     * @parameter expression="${jsTestDriver.config}" default-value="src/test/resources/jsTestDriver.conf"
+     * @parameter expression="${jsTestDriver.runnerMode}" default-value=""
      */
-    private String config;
+    private String runnerMode;
+
+
+    /**
+     * @parameter expression="${jsTestDriver.browser}" default-value=""
+     */
+    private String browser;
+
+    /**
+     * @parameter expression="${jsTestDriver.browserTimeout}" default-value=""
+     */
+    private String browserTimeout;
 
     /**
      * @parameter expression="${jsTestDriver.captureConsole}" default-value=true
@@ -69,9 +85,39 @@ public class JsTestDriverMojo extends AbstractMojo
     private boolean captureConsole;
 
     /**
+     * @parameter expression="${jsTestDriver.config}" default-value="src/test/resources/jsTestDriver.conf"
+     */
+    private String config;
+
+    /**
+     * @parameter expression="${jsTestDriver.dryRunFor}" default-value=""
+     */
+    private String dryRunFor;
+
+    /**
+     * @parameter expression="${jsTestDriver.port}" default-value=""
+     */
+    private String port;
+
+    /**
+     * @parameter expression="${jsTestDriver.preloadFiles}" default-value=false
+     */
+    private boolean preloadFiles;
+
+    /**
      * @parameter expression="${jsTestDriver.reset}" default-value=false
      */
     private boolean reset;
+
+    /**
+     * @parameter expression="${jsTestDriver.server}" default-value=""
+     */
+    private String server;
+
+    /**
+     * @parameter expression="${jsTestDriver.testOutput}" default-value=""
+     */
+    private String testOutput;
 
     /**
      * @parameter expression="${jsTestDriver.tests}" default-value="all"
@@ -83,26 +129,20 @@ public class JsTestDriverMojo extends AbstractMojo
      */
     private boolean verbose;
 
-    /**
-     * @parameter expression="${jsTestDriver.testOutput}" default-value=""
-     */
-    private String testOutput;
 
-    /**
-     * @parameter expression="${jsTestDriver.server}" default-value=""
-     */
-    private String server;
 
-    /**
-     * @parameter expression="${jsTestDriver.port}" default-value=""
-     */
-    private String port;
+    // internals
+    private ProcessExecutor processExecutor;
+    private ResultsProcessor resultsProcessor;
 
-    /**
-     * @parameter expression="${jsTestDriver.browser}" default-value=""
-     */
-    private String browser;
+    public JsTestDriverMojo() {
+        this(new StreamingProcessExecutor(), new ResultsProcessor());
+    }
 
+    public JsTestDriverMojo(ProcessExecutor processExecutor, ResultsProcessor resultsProcessor) {
+        this.processExecutor = processExecutor;
+        this.resultsProcessor = resultsProcessor;
+    }
 
     public void execute() throws MojoExecutionException
     {
@@ -119,9 +159,7 @@ public class JsTestDriverMojo extends AbstractMojo
         ProcessConfiguration config = buildProcessConfiguration();
         logProcessArguments(config);
 
-        String output = new StreamingProcessExecutor().execute(config);
-
-        new ResultsProcessor().processResults(output);
+        resultsProcessor.processResults(processExecutor.execute(config));
     }
 
     private ProcessConfiguration buildProcessConfiguration()
@@ -169,28 +207,55 @@ public class JsTestDriverMojo extends AbstractMojo
     private void buildArguments(JarProcessConfiguration testRunner)
             throws MojoExecutionException
     {
-        testRunner.addArgument("--config", config);
-        testRunner.addArgument("--tests", tests);
+        if (StringUtils.isNotEmpty(basePath)) {
+            if (config.startsWith(basePath)) {
+                config = StringUtils.stripStart(config, basePath);
+                if (config.startsWith("/")) {
+                    config = StringUtils.stripStart(config, "/");
+                }
+            }
+        }
 
+        if (StringUtils.isNotEmpty(basePath))
+        {
+            testRunner.addArgument("--basePath", basePath);
+        }
+        if (StringUtils.isNotEmpty(browser))
+        {
+            testRunner.addArgument("--browser", browser);
+        }
+        if (StringUtils.isNotEmpty(browserTimeout))
+        {
+            testRunner.addArgument("--browserTimeout", browserTimeout);
+        }
         if (captureConsole)
         {
             testRunner.addArgument("--captureConsole");
         }
-        if (reset)
+        testRunner.addArgument("--config", config);
+        if (StringUtils.isNotEmpty(dryRunFor))
         {
-            testRunner.addArgument("--reset");
+            testRunner.addArgument("--dryRunFor", dryRunFor);
         }
         if (StringUtils.isNotEmpty(port))
         {
             testRunner.addArgument("--port", port);
         }
+        if (preloadFiles)
+        {
+            testRunner.addArgument("--preloadFiles");
+        }
+        if (reset)
+        {
+            testRunner.addArgument("--reset");
+        }
+        if (StringUtils.isNotEmpty(runnerMode))
+        {
+            testRunner.addArgument("--runnerMode", runnerMode);
+        }
         if (StringUtils.isNotEmpty(server))
         {
             testRunner.addArgument("--server", server);
-        }
-        if (StringUtils.isNotEmpty(browser))
-        {
-            testRunner.addArgument("--browser", browser);
         }
         if (StringUtils.isNotEmpty(testOutput))
         {
@@ -200,6 +265,7 @@ public class JsTestDriverMojo extends AbstractMojo
             }
             testRunner.addArgument("--testOutput", testOutput);
         }
+        testRunner.addArgument("--tests", tests);
         if (verbose)
         {
             testRunner.addArgument("--verbose");
