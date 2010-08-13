@@ -70,7 +70,7 @@
         <repository>
             <id>jstd-maven-plugin-repo</id>
             <name>jstd maven plugin repo</name>
-            <url>http://jstd-maven-plugin.googlecode.com/svn/repo</url>
+            <url>http://jstd-maven-plugin.googlecode.com/svn/maven2</url>
         </repository>
     </repositories>
 

@@ -98,7 +98,7 @@
         <repository>
             <id>jstd-maven-plugin-repo</id>
             <name>jstd maven plugin repo</name>
-            <url>http://jstd-maven-plugin.googlecode.com/svn/repo</url>
+            <url>http://jstd-maven-plugin.googlecode.com/svn/maven2</url>
         </repository>
     </repositories>
 
@@ -106,8 +106,13 @@
         <repository>
             <uniqueVersion>false</uniqueVersion>
             <id>jstd-maven-plugin-repo</id>
-            <url>svn:https://jstd-maven-plugin.googlecode.com/svn/repo</url>
+            <url>svn:https://jstd-maven-plugin.googlecode.com/svn/maven2</url>
         </repository>
+        <snapshotRepository>
+            <uniqueVersion>true</uniqueVersion>
+            <id>jstd-maven-plugin-repo</id>
+            <url>svn:https://jstd-maven-plugin.googlecode.com/svn/maven2</url>
+        </snapshotRepository>
     </distributionManagement>
 
 </project>

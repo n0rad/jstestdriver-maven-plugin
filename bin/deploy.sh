@@ -1,15 +1,16 @@
 #!/bin/sh
 
 VERSION=$1
-JAR_FILE=jstestdriver-$VERSION.jar
+URL=svn:https://jstd-maven-plugin.googlecode.com/svn/maven2
+ARTIFACT=jstestdriver
+FILE=jstestdriver-$VERSION.jar
 
-echo "Deploying $JAR_FILE"
-
+echo "Deploying $FILE"
 mvn -e deploy:deploy-file \
-  -Durl=svn:https://jstd-maven-plugin.googlecode.com/svn/repo \
+  -Durl=$URL \
   -DrepositoryId=jstd-maven-plugin-repo \
-  -Dfile=$JAR_FILE \
+  -Dfile=$FILE \
   -DgroupId=com.google.jstestdriver \
-  -DartifactId=jstestdriver \
+  -DartifactId=$ARTIFACT \
   -Dversion=$VERSION \
   -Dpackaging=jar
