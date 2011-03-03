@@ -13,7 +13,7 @@
         <dependency>
             <groupId>com.google.jstestdriver</groupId>
             <artifactId>maven-jstestdriver-plugin</artifactId>
-            <version>1.2.2-SNAPSHOT</version>
+            <version>1.3.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -40,7 +40,7 @@
                     <plugin>
                         <groupId>com.google.jstestdriver</groupId>
                         <artifactId>maven-jstestdriver-plugin</artifactId>
-                        <version>1.2.2-SNAPSHOT</version>
+                        <version>1.3.1-SNAPSHOT</version>
                         <executions>
                             <execution>
                                 <id>run-tests</id>
@@ -50,11 +50,10 @@
                                 </goals>
                                 <configuration>
                                     <!-- You might need to adjust this depending on your OS.  On Mac,
-                                    this will launch Safari -->
+                                    this will launch your default browser -->
                                     <browser>open</browser>
 
                                     <port>9876</port>
-                                    <basePath>src</basePath>
                                 </configuration>
                             </execution>
                         </executions>
