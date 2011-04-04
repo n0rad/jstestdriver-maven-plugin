@@ -64,12 +64,6 @@ public class JsTestDriverMojo extends AbstractMojo
     private String basePath;
 
     /**
-     * @parameter expression="${jsTestDriver.runnerMode}" default-value=""
-     */
-    private String runnerMode;
-
-
-    /**
      * @parameter expression="${jsTestDriver.browser}" default-value=""
      */
     private String browser;
@@ -95,6 +89,11 @@ public class JsTestDriverMojo extends AbstractMojo
     private String dryRunFor;
 
     /**
+     * @parameter expression="${jsTestDriver.plugins}" default-value=""
+     */
+    private String plugins;
+
+    /**
      * @parameter expression="${jsTestDriver.port}" default-value=""
      */
     private String port;
@@ -105,14 +104,29 @@ public class JsTestDriverMojo extends AbstractMojo
     private boolean preloadFiles;
 
     /**
+     * @parameter expression="${jsTestDriver.requiredBrowser}" default-value=""
+     */
+    private String requiredBrowser;
+
+    /**
      * @parameter expression="${jsTestDriver.reset}" default-value=false
      */
     private boolean reset;
 
     /**
+     * @parameter expression="${jsTestDriver.runnerMode}" default-value=""
+     */
+    private String runnerMode;
+
+    /**
      * @parameter expression="${jsTestDriver.server}" default-value=""
      */
     private String server;
+
+    /**
+     * @parameter expression="${jsTestDriver.serverHandlerPrefix}" default-value=""
+     */
+    private String serverHandlerPrefix;
 
     /**
      * @parameter expression="${jsTestDriver.testOutput}" default-value=""
@@ -128,7 +142,6 @@ public class JsTestDriverMojo extends AbstractMojo
      * @parameter expression="${jsTestDriver.verbose}" default-value=false
      */
     private boolean verbose;
-
 
 
     // internals
@@ -163,7 +176,7 @@ public class JsTestDriverMojo extends AbstractMojo
     }
 
     private ProcessConfiguration buildProcessConfiguration()
-            throws MojoExecutionException
+        throws MojoExecutionException
     {
         ProcessConfiguration configuration;
         if (StringUtils.isNotEmpty(jar))
@@ -205,7 +218,7 @@ public class JsTestDriverMojo extends AbstractMojo
     }
 
     private void buildArguments(JarProcessConfiguration testRunner)
-            throws MojoExecutionException
+        throws MojoExecutionException
     {
         if (StringUtils.isNotEmpty(basePath)) {
             if (config.startsWith(basePath)) {
@@ -237,6 +250,10 @@ public class JsTestDriverMojo extends AbstractMojo
         {
             testRunner.addArgument("--dryRunFor", dryRunFor);
         }
+        if (StringUtils.isNotEmpty(plugins))
+        {
+            testRunner.addArgument("--plugins", plugins);
+        }
         if (StringUtils.isNotEmpty(port))
         {
             testRunner.addArgument("--port", port);
@@ -244,6 +261,10 @@ public class JsTestDriverMojo extends AbstractMojo
         if (preloadFiles)
         {
             testRunner.addArgument("--preloadFiles");
+        }
+        if (StringUtils.isNotEmpty(requiredBrowser))
+        {
+            testRunner.addArgument("--requiredBrowser", requiredBrowser);
         }
         if (reset)
         {
@@ -256,6 +277,10 @@ public class JsTestDriverMojo extends AbstractMojo
         if (StringUtils.isNotEmpty(server))
         {
             testRunner.addArgument("--server", server);
+        }
+        if (StringUtils.isNotEmpty(serverHandlerPrefix))
+        {
+            testRunner.addArgument("--serverHandlerPrefix", serverHandlerPrefix);
         }
         if (StringUtils.isNotEmpty(testOutput))
         {
@@ -284,8 +309,8 @@ public class JsTestDriverMojo extends AbstractMojo
     private void printBanner()
     {
         System.out.println("\n" +
-                "-------------------------------------------\n" +
-                " J S  T E S T  D R I V E R                 \n" +
-                "-------------------------------------------\n");
+                               "-------------------------------------------\n" +
+                               " J S  T E S T  D R I V E R                 \n" +
+                               "-------------------------------------------\n");
     }
 }
