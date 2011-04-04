@@ -12,6 +12,9 @@ import java.util.Set;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Copyright 2009-2011, Burke Webster (burke.webster@gmail.com)
+ */
 public abstract class AbstractMojoTest {
 
     public static final String GROUP_ID = "com.google.jstestdriver";

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
+ * Copyright 2009-2011, Burke Webster (burke.webster@gmail.com)
  *
  * @requiresDependencyResolution test
  * @goal test
@@ -104,9 +104,9 @@ public class JsTestDriverMojo extends AbstractMojo
     private boolean preloadFiles;
 
     /**
-     * @parameter expression="${jsTestDriver.requiredBrowser}" default-value=""
+     * @parameter expression="${jsTestDriver.requiredBrowsers}" default-value=""
      */
-    private String requiredBrowser;
+    private String requiredBrowsers;
 
     /**
      * @parameter expression="${jsTestDriver.reset}" default-value=false
@@ -221,7 +221,7 @@ public class JsTestDriverMojo extends AbstractMojo
         throws MojoExecutionException
     {
         if (StringUtils.isNotEmpty(basePath)) {
-            if (config.startsWith(basePath)) {
+            if (StringUtils.isNotEmpty(config) && config.startsWith(basePath)) {
                 config = StringUtils.stripStart(config, basePath);
                 if (config.startsWith("/")) {
                     config = StringUtils.stripStart(config, "/");
@@ -262,9 +262,9 @@ public class JsTestDriverMojo extends AbstractMojo
         {
             testRunner.addArgument("--preloadFiles");
         }
-        if (StringUtils.isNotEmpty(requiredBrowser))
+        if (StringUtils.isNotEmpty(requiredBrowsers))
         {
-            testRunner.addArgument("--requiredBrowser", requiredBrowser);
+            testRunner.addArgument("--requiredBrowsers", requiredBrowsers);
         }
         if (reset)
         {

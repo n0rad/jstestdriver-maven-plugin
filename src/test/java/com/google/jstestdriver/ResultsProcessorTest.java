@@ -5,7 +5,7 @@ import static org.testng.Assert.fail;
 import org.testng.annotations.Test;
 
 /**
- * Copyright 2009-2010, Burke Webster (burke.webster@gmail.com)
+ * Copyright 2009-2011, Burke Webster (burke.webster@gmail.com)
  */
 @Test
 public class ResultsProcessorTest
