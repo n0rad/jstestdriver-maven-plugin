@@ -51,6 +51,10 @@ public class JsTestDriverMojo extends AbstractMojo
      */
     private String jar;
 
+    /**
+     * @parameter expression="${jsTestDriver.jvmOpts}" default-value=""
+     */
+    private String jvmOpts;
 
 
     /**
@@ -176,7 +180,7 @@ public class JsTestDriverMojo extends AbstractMojo
     }
 
     private ProcessConfiguration buildProcessConfiguration()
-        throws MojoExecutionException
+            throws MojoExecutionException
     {
         ProcessConfiguration configuration;
         if (StringUtils.isNotEmpty(jar))
@@ -196,14 +200,21 @@ public class JsTestDriverMojo extends AbstractMojo
     private ProcessConfiguration buildMavenJarProcessConfig() throws MojoExecutionException
     {
         Artifact artifact = new ArtifactLocator(mavenProject).findArtifact(groupId, artifactId);
-        ProcessConfiguration jarConfig = new JarProcessConfiguration(artifact.getFile().getAbsolutePath());
-        addClasspathArguments((JarProcessConfiguration) jarConfig);
+        JarProcessConfiguration jarConfig = new JarProcessConfiguration(artifact.getFile().getAbsolutePath());
+        addClasspathArguments(jarConfig);
+        if (StringUtils.isNotEmpty(jvmOpts)) {
+            jarConfig.addExecutableOptions(jvmOpts);
+        }
         return jarConfig;
     }
 
     private ProcessConfiguration buildLocalJarProcessConfig() throws MojoExecutionException
     {
-        return new JarProcessConfiguration(jar);
+        JarProcessConfiguration processConfiguration = new JarProcessConfiguration(jar);
+        if (StringUtils.isNotEmpty(jvmOpts)) {
+            processConfiguration.addExecutableOptions(jvmOpts);
+        }
+        return processConfiguration;
     }
 
     private void addClasspathArguments(JarProcessConfiguration jarConfig)
@@ -218,7 +229,7 @@ public class JsTestDriverMojo extends AbstractMojo
     }
 
     private void buildArguments(JarProcessConfiguration testRunner)
-        throws MojoExecutionException
+            throws MojoExecutionException
     {
         if (StringUtils.isNotEmpty(basePath)) {
             if (StringUtils.isNotEmpty(config) && config.startsWith(basePath)) {
@@ -297,20 +308,18 @@ public class JsTestDriverMojo extends AbstractMojo
         }
     }
 
-    private void logProcessArguments(ProcessConfiguration processedArgs)
+    private void logProcessArguments(ProcessConfiguration processConfiguration)
     {
         if (verbose) {
-            System.out.println(String.format("Running: %s %s",
-                                             processedArgs.getExecutable(),
-                                             StringUtils.join(processedArgs.getArguments(), " ")));
+            System.out.println(String.format("Running: %s", StringUtils.join(processConfiguration.getFullCommand(), " ")));
         }
     }
 
     private void printBanner()
     {
         System.out.println("\n" +
-                               "-------------------------------------------\n" +
-                               " J S  T E S T  D R I V E R                 \n" +
-                               "-------------------------------------------\n");
+                "-------------------------------------------\n" +
+                " J S  T E S T  D R I V E R                 \n" +
+                "-------------------------------------------\n");
     }
 }

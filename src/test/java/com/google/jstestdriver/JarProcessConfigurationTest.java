@@ -1,9 +1,10 @@
 package com.google.jstestdriver;
 
-import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+
+import static org.testng.Assert.assertEquals;
 
 /**
  * Copyright 2009-2011, Burke Webster (burke.webster@gmail.com)
@@ -31,7 +32,7 @@ public class JarProcessConfigurationTest
 
         assertEquals(config.getArguments(), Arrays.asList("-classpath", "/some/jar/path/library.jar", "-jar", path, "-test", "works"));
     }
-    
+
     public void executableShouldBeJava()
     {
         assertEquals(new JarProcessConfiguration(null).getExecutable(), "java");

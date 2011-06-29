@@ -11,6 +11,7 @@ public class JarProcessConfiguration implements ProcessConfiguration
 {
     private List<String> arguments;
     private List<String> classpath;
+    private List<String> options;
     private String jarPath;
     private static final String JAVA_ARG = "java";
     private static final String JAR_ARG = "-jar";
@@ -20,6 +21,7 @@ public class JarProcessConfiguration implements ProcessConfiguration
         this.jarPath = jarPath;
         arguments = new ArrayList<String>();
         classpath = new ArrayList<String>();
+        options = new ArrayList<String>();
     }
 
     public void addArgument(String... values)
@@ -30,6 +32,22 @@ public class JarProcessConfiguration implements ProcessConfiguration
     public void addClasspath(String... values)
     {
         classpath.addAll(Arrays.asList(values));
+    }
+
+    public void addExecutableOptions(String... jvmOptions) {
+        options.addAll(Arrays.asList(jvmOptions));
+    }
+
+    public List<String> getExecutableOptions() {
+        return options;
+    }
+
+    public List<String> getFullCommand() {
+        List<String> commandLine = new ArrayList<String>();
+        commandLine.add(getExecutable());
+        commandLine.addAll(getExecutableOptions());
+        commandLine.addAll(getArguments());
+        return commandLine;
     }
 
     public List<String> getArguments()

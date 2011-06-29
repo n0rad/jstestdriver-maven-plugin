@@ -10,4 +10,8 @@ public interface ProcessConfiguration
     String getExecutable();
 
     List<String> getArguments();
+
+    List<String> getExecutableOptions();
+
+    List<String> getFullCommand();
 }

@@ -1,12 +1,8 @@
 package com.google.jstestdriver;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Copyright 2009-2011, Burke Webster (burke.webster@gmail.com)

@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Copyright 2009-2011, Burke Webster (burke.webster@gmail.com)
@@ -37,11 +35,7 @@ public class StreamingProcessExecutor implements ProcessExecutor
 
     private Process create(ProcessConfiguration configuration) throws IOException
     {
-        List<String> commandLine = new ArrayList<String>();
-        commandLine.add(configuration.getExecutable());
-        commandLine.addAll(configuration.getArguments());
-
-        ProcessBuilder pb = new ProcessBuilder(commandLine);
+        ProcessBuilder pb = new ProcessBuilder(configuration.getFullCommand());
         pb.redirectErrorStream(true);
         return pb.start();
     }
