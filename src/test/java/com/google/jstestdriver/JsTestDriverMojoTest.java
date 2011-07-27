@@ -8,14 +8,10 @@ import org.testng.annotations.Test;
 import java.io.File;
 
 import static com.google.jstestdriver.matchers.ExecutorCalledWithMatcher.wasCalledWith;
-import static com.google.jstestdriver.matchers.ExecutorNotCalledWithMatcher.wasNotCalledWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.testng.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
@@ -52,11 +48,11 @@ public class JsTestDriverMojoTest extends AbstractMojoTest {
 
     public void shouldAdjustConfigPathIfBasePathIsGiven() throws Exception {
         setField(mojo, "basePath", "src");
-        setField(mojo, "config", "src/test/resources/jsTestDriver.conf");
+        setField(mojo, "config", "test/resources/jsTestDriver.conf");
 
         mojo.execute();
 
-        assertThat(executor, wasCalledWith(projessConfigArgCaptor, "--config test/resources/jsTestDriver.conf"));
+        assertThat(executor, wasCalledWith(projessConfigArgCaptor, "--config src/test/resources/jsTestDriver.conf"));
     }
 
     public void shouldCreateTestOutputDirectoryIfNotExists() throws Exception {

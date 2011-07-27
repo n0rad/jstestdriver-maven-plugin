@@ -6,6 +6,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +14,10 @@ import java.util.List;
  * Copyright 2009-2011, Burke Webster (burke.webster@gmail.com)
  *
  * @requiresDependencyResolution test
- * @goal test
+ * @goal jstest
+ * @phase test
  */
-public class JsTestDriverMojo extends AbstractMojo
-{
+public class JsTestDriverMojo extends AbstractMojo {
     /**
      * Mojo Options
      */
@@ -161,12 +162,10 @@ public class JsTestDriverMojo extends AbstractMojo
         this.resultsProcessor = resultsProcessor;
     }
 
-    public void execute() throws MojoExecutionException
-    {
+    public void execute() throws MojoExecutionException {
         MojoLogger.bindLog(getLog());
 
-        if (skipTests)
-        {
+        if (skipTests) {
             getLog().info("Tests are skipped.");
             return;
         }
@@ -180,15 +179,11 @@ public class JsTestDriverMojo extends AbstractMojo
     }
 
     private ProcessConfiguration buildProcessConfiguration()
-            throws MojoExecutionException
-    {
+            throws MojoExecutionException {
         ProcessConfiguration configuration;
-        if (StringUtils.isNotEmpty(jar))
-        {
+        if (StringUtils.isNotEmpty(jar)) {
             configuration = buildLocalJarProcessConfig();
-        }
-        else
-        {
+        } else {
             configuration = buildMavenJarProcessConfig();
         }
 
@@ -197,8 +192,7 @@ public class JsTestDriverMojo extends AbstractMojo
         return configuration;
     }
 
-    private ProcessConfiguration buildMavenJarProcessConfig() throws MojoExecutionException
-    {
+    private ProcessConfiguration buildMavenJarProcessConfig() throws MojoExecutionException {
         Artifact artifact = new ArtifactLocator(mavenProject).findArtifact(groupId, artifactId);
         JarProcessConfiguration jarConfig = new JarProcessConfiguration(artifact.getFile().getAbsolutePath());
         addClasspathArguments(jarConfig);
@@ -208,8 +202,7 @@ public class JsTestDriverMojo extends AbstractMojo
         return jarConfig;
     }
 
-    private ProcessConfiguration buildLocalJarProcessConfig() throws MojoExecutionException
-    {
+    private ProcessConfiguration buildLocalJarProcessConfig() throws MojoExecutionException {
         JarProcessConfiguration processConfiguration = new JarProcessConfiguration(jar);
         if (StringUtils.isNotEmpty(jvmOpts)) {
             processConfiguration.addExecutableOptions(jvmOpts);
@@ -217,11 +210,9 @@ public class JsTestDriverMojo extends AbstractMojo
         return processConfiguration;
     }
 
-    private void addClasspathArguments(JarProcessConfiguration jarConfig)
-    {
+    private void addClasspathArguments(JarProcessConfiguration jarConfig) {
         List<String> classpathArgs = new ArrayList<String>();
-        for (Artifact artifact : dependencies)
-        {
+        for (Artifact artifact : dependencies) {
             classpathArgs.add(artifact.getFile().getAbsolutePath());
         }
 
@@ -229,94 +220,75 @@ public class JsTestDriverMojo extends AbstractMojo
     }
 
     private void buildArguments(JarProcessConfiguration testRunner)
-            throws MojoExecutionException
-    {
-        if (StringUtils.isNotEmpty(basePath)) {
-            if (StringUtils.isNotEmpty(config) && config.startsWith(basePath)) {
-                config = StringUtils.stripStart(config, basePath);
-                if (config.startsWith("/")) {
-                    config = StringUtils.stripStart(config, "/");
-                }
+            throws MojoExecutionException {
+        if (config != null) {
+            File configFile = new File(config);
+            if (!configFile.isAbsolute()) {
+                File base = StringUtils.isNotEmpty(basePath) ? new File(basePath) : mavenProject.getBasedir();
+                configFile = new File(base, config);
+                config = configFile.getPath();
             }
         }
 
-        if (StringUtils.isNotEmpty(basePath))
-        {
+        if (StringUtils.isNotEmpty(basePath)) {
             testRunner.addArgument("--basePath", basePath);
         }
-        if (StringUtils.isNotEmpty(browser))
-        {
+        if (StringUtils.isNotEmpty(browser)) {
             testRunner.addArgument("--browser", browser);
         }
-        if (StringUtils.isNotEmpty(browserTimeout))
-        {
+        if (StringUtils.isNotEmpty(browserTimeout)) {
             testRunner.addArgument("--browserTimeout", browserTimeout);
         }
-        if (captureConsole)
-        {
+        if (captureConsole) {
             testRunner.addArgument("--captureConsole");
         }
         testRunner.addArgument("--config", config);
-        if (StringUtils.isNotEmpty(dryRunFor))
-        {
+        if (StringUtils.isNotEmpty(dryRunFor)) {
             testRunner.addArgument("--dryRunFor", dryRunFor);
         }
-        if (StringUtils.isNotEmpty(plugins))
-        {
+        if (StringUtils.isNotEmpty(plugins)) {
             testRunner.addArgument("--plugins", plugins);
         }
-        if (StringUtils.isNotEmpty(port))
-        {
+        if (StringUtils.isNotEmpty(port)) {
             testRunner.addArgument("--port", port);
         }
-        if (preloadFiles)
-        {
+        if (preloadFiles) {
             testRunner.addArgument("--preloadFiles");
         }
-        if (StringUtils.isNotEmpty(requiredBrowsers))
-        {
+        if (StringUtils.isNotEmpty(requiredBrowsers)) {
             testRunner.addArgument("--requiredBrowsers", requiredBrowsers);
         }
-        if (reset)
-        {
+        if (reset) {
             testRunner.addArgument("--reset");
         }
-        if (StringUtils.isNotEmpty(runnerMode))
-        {
+        if (StringUtils.isNotEmpty(runnerMode)) {
             testRunner.addArgument("--runnerMode", runnerMode);
         }
-        if (StringUtils.isNotEmpty(server))
-        {
+        if (StringUtils.isNotEmpty(server)) {
             testRunner.addArgument("--server", server);
         }
-        if (StringUtils.isNotEmpty(serverHandlerPrefix))
-        {
+        if (StringUtils.isNotEmpty(serverHandlerPrefix)) {
             testRunner.addArgument("--serverHandlerPrefix", serverHandlerPrefix);
         }
-        if (StringUtils.isNotEmpty(testOutput))
-        {
-            if (testOutput != null && !testOutput.equals("."))
-            {
+        if (StringUtils.isNotEmpty(testOutput)) {
+            if (testOutput != null && !testOutput.equals(".")) {
                 FileUtils.makeDirectoryIfNotExists(testOutput);
             }
             testRunner.addArgument("--testOutput", testOutput);
         }
         testRunner.addArgument("--tests", tests);
-        if (verbose)
-        {
+        if (verbose) {
             testRunner.addArgument("--verbose");
         }
     }
 
-    private void logProcessArguments(ProcessConfiguration processConfiguration)
-    {
+    private void logProcessArguments(ProcessConfiguration processConfiguration) {
         if (verbose) {
             System.out.println(String.format("Running: %s", StringUtils.join(processConfiguration.getFullCommand(), " ")));
         }
     }
 
-    private void printBanner()
-    {
+    private void printBanner() {
         System.out.println("\n" +
                 "-------------------------------------------\n" +
                 " J S  T E S T  D R I V E R                 \n" +
