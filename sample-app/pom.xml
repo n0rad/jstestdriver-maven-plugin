@@ -34,7 +34,7 @@
             <plugin>
                 <groupId>com.google.jstestdriver</groupId>
                 <artifactId>maven-jstestdriver-plugin</artifactId>
-                <version>1.3.2-SNAPSHOT</version>
+                <version>1.3.2.3</version>
                 <configuration>
                     <verbose>true</verbose>
                     <!-- You might need to adjust this depending on your OS.  On Mac,
@@ -55,6 +55,13 @@
         </plugins>
     </build>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jstd-maven-plugin-repo</id>
+            <name>jstd maven plugin repo</name>
+            <url>http://jstd-maven-plugin.googlecode.com/svn/maven2</url>
+        </pluginRepository>
+    </pluginRepositories>
     <repositories>
         <repository>
             <id>jstd-maven-plugin-repo</id>
