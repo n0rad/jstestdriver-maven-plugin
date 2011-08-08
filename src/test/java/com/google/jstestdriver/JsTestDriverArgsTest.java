@@ -68,10 +68,18 @@ public class JsTestDriverArgsTest extends AbstractMojoTest {
         assertThat(executor, wasNotCalledWith(projessConfigArgCaptor, "--captureConsole"));
     }
 
-    public void shouldPassAlongConfigIfProvided() throws Exception {
-        setField(mojo, "config", "path/to/config.txt");
+    public void shouldMakeConfigFileAbsolute() throws Exception {
+        String path = "path/to/config.txt";
+        setField(mojo, "config", path);
         mojo.execute();
-        assertThat(executor, wasCalledWith(projessConfigArgCaptor, "--config path/to/config.txt"));
+        assertThat(executor, wasCalledWith(projessConfigArgCaptor, String.format("--config %s/%s", basedir.getAbsolutePath(), path)));
+    }
+
+    public void shouldPassAlongAbsoluteConfig() throws Exception {
+        String path = "/abs/path/to/config.txt";
+        setField(mojo, "config", path);
+        mojo.execute();
+        assertThat(executor, wasCalledWith(projessConfigArgCaptor, String.format("--config %s", path)));
     }
 
     public void shouldPassAlongDryRunForIfProvided() throws Exception {

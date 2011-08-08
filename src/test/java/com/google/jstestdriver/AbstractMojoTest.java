@@ -4,6 +4,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashSet;
@@ -17,8 +18,9 @@ import static org.mockito.Mockito.when;
  */
 public abstract class AbstractMojoTest {
 
-    public static final String GROUP_ID = "com.google.jstestdriver";
-    public static final String ARTIFACT_ID = "jstestdriver";
+    protected static final String GROUP_ID = "com.google.jstestdriver";
+    protected static final String ARTIFACT_ID = "jstestdriver";
+    protected File basedir;
 
     protected void setField(JsTestDriverMojo mojo, String fieldName, Object object) throws
             NoSuchFieldException,
@@ -46,6 +48,10 @@ public abstract class AbstractMojoTest {
 
         MavenProject project = mock(MavenProject.class);
         when(project.getArtifacts()).thenReturn(artifacts);
+
+        basedir = mock(File.class);
+        when(basedir.getAbsolutePath()).thenReturn("/path/to/project/root");
+        when(project.getBasedir()).thenReturn(basedir);
 
         setField(mojo, "groupId", GROUP_ID);
         setField(mojo, "artifactId", ARTIFACT_ID);

@@ -13,7 +13,7 @@
         <dependency>
             <groupId>com.google.jstestdriver</groupId>
             <artifactId>maven-jstestdriver-plugin</artifactId>
-            <version>1.3.2.3</version>
+            <version>1.3.2.4</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -34,7 +34,7 @@
             <plugin>
                 <groupId>com.google.jstestdriver</groupId>
                 <artifactId>maven-jstestdriver-plugin</artifactId>
-                <version>1.3.2.3</version>
+                <version>1.3.2.4</version>
                 <configuration>
                     <verbose>true</verbose>
                     <!-- You might need to adjust this depending on your OS.  On Mac,

@@ -57,6 +57,10 @@ public class JsTestDriverMojo extends AbstractMojo {
      */
     private String jvmOpts;
 
+    /**
+     * @parameter expression="${jsTestDriver.defaultBasePath}" default-value="true"
+     */
+    private boolean defaultBasePath;
 
     /**
      * JsTD Options:
@@ -221,15 +225,18 @@ public class JsTestDriverMojo extends AbstractMojo {
 
     private void buildArguments(JarProcessConfiguration testRunner)
             throws MojoExecutionException {
+        String defaultedBasePath = StringUtils.defaultIfEmpty(basePath, mavenProject.getBasedir().getAbsolutePath()); 
         if (config != null) {
             File configFile = new File(config);
             if (!configFile.isAbsolute()) {
-                File base = StringUtils.isNotEmpty(basePath) ? new File(basePath) : mavenProject.getBasedir();
-                configFile = new File(base, config);
+                configFile = new File(defaultedBasePath, config);
                 config = configFile.getPath();
             }
         }
 
+        if (defaultBasePath) {
+            basePath = defaultedBasePath;
+        }
         if (StringUtils.isNotEmpty(basePath)) {
             testRunner.addArgument("--basePath", basePath);
         }
