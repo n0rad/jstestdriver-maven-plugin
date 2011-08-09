@@ -1,10 +1,10 @@
-package com.google.jstestdriver;
+package com.googlecode.jstdmavenplugin;
 
+import com.googlecode.jstdmavenplugin.JsTestDriverMojo;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashSet;

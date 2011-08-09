@@ -1,7 +1,7 @@
-package com.google.jstestdriver.matchers;
+package com.googlecode.jstdmavenplugin.matchers;
 
-import com.google.jstestdriver.ProcessConfiguration;
-import com.google.jstestdriver.ProcessExecutor;
+import com.googlecode.jstdmavenplugin.ProcessConfiguration;
+import com.googlecode.jstdmavenplugin.ProcessExecutor;
 import org.apache.commons.lang.StringUtils;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;

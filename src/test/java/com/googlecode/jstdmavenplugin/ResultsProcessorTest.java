@@ -1,5 +1,6 @@
-package com.google.jstestdriver;
+package com.googlecode.jstdmavenplugin;
 
+import com.googlecode.jstdmavenplugin.ResultsProcessor;
 import org.apache.maven.plugin.MojoExecutionException;
 import static org.testng.Assert.fail;
 import org.testng.annotations.Test;

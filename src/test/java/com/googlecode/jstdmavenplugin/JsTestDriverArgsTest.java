@@ -1,17 +1,15 @@
-package com.google.jstestdriver;
+package com.googlecode.jstdmavenplugin;
 
 import org.apache.maven.project.MavenProject;
 import org.mockito.ArgumentCaptor;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static com.google.jstestdriver.matchers.ExecutorCalledWithMatcher.wasCalledWith;
-import static com.google.jstestdriver.matchers.ExecutorNotCalledWithMatcher.wasNotCalledWith;
+import static com.googlecode.jstdmavenplugin.matchers.ExecutorCalledWithMatcher.wasCalledWith;
+import static com.googlecode.jstdmavenplugin.matchers.ExecutorNotCalledWithMatcher.wasNotCalledWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 /**

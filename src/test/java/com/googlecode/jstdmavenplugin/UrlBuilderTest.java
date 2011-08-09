@@ -1,6 +1,8 @@
-package com.google.jstestdriver;
+package com.googlecode.jstdmavenplugin;
 
 import static org.testng.Assert.assertEquals;
+
+import com.googlecode.jstdmavenplugin.UrlBuilder;
 import org.testng.annotations.Test;
 
 /**

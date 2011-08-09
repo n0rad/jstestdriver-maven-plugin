@@ -1,4 +1,4 @@
-package com.google.jstestdriver;
+package com.googlecode.jstdmavenplugin;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.artifact.Artifact;
@@ -14,7 +14,7 @@ import java.util.List;
  * Copyright 2009-2011, Burke Webster (burke.webster@gmail.com)
  *
  * @requiresDependencyResolution test
- * @goal jstest
+ * @goal test
  * @phase test
  */
 public class JsTestDriverMojo extends AbstractMojo {
@@ -38,29 +38,33 @@ public class JsTestDriverMojo extends AbstractMojo {
     private boolean skipTests;
 
     /**
-     * @parameter expression="${jsTestDriver.artifactId}" default-value="jstestdriver"
+     * @parameter expression="${jstd.artifactId}" default-value="jstestdriver"
      */
     private String artifactId;
 
     /**
-     * @parameter expression="${jsTestDriver.groupdId}" default-value="com.google.jstestdriver"
+     * @parameter expression="${jstd.groupdId}" default-value="com.google.jstestdriver"
      */
     private String groupId;
 
     /**
-     * @parameter expression="${jsTestDriver.jar}" default-value=""
+     * @parameter expression="${jstd.jar}" default-value=""
      */
     private String jar;
 
     /**
-     * @parameter expression="${jsTestDriver.jvmOpts}" default-value=""
+     * @parameter expression="${jstd.jvmOpts}" default-value=""
      */
     private String jvmOpts;
 
     /**
-     * @parameter expression="${jsTestDriver.defaultBasePath}" default-value="true"
+     * Should we default in the basePath if none is specified? Defaults to true.
+     *
+     * @parameter expression="${jstd.defaultBasePath}" default-value="true"
      */
     private boolean defaultBasePath;
+
+    
 
     /**
      * JsTD Options:
@@ -68,87 +72,87 @@ public class JsTestDriverMojo extends AbstractMojo {
      */
 
     /**
-     * @parameter expression="${jsTestDriver.basePath}" default-value=""
+     * @parameter expression="${jstd.basePath}" default-value=""
      */
     private String basePath;
 
     /**
-     * @parameter expression="${jsTestDriver.browser}" default-value=""
+     * @parameter expression="${jstd.browser}" default-value=""
      */
     private String browser;
 
     /**
-     * @parameter expression="${jsTestDriver.browserTimeout}" default-value=""
+     * @parameter expression="${jstd.browserTimeout}" default-value=""
      */
     private String browserTimeout;
 
     /**
-     * @parameter expression="${jsTestDriver.captureConsole}" default-value=true
+     * @parameter expression="${jstd.captureConsole}" default-value=true
      */
     private boolean captureConsole;
 
     /**
-     * @parameter expression="${jsTestDriver.config}" default-value="src/test/resources/jsTestDriver.conf"
+     * @parameter expression="${jstd.config}" default-value="src/test/resources/jsTestDriver.conf"
      */
     private String config;
 
     /**
-     * @parameter expression="${jsTestDriver.dryRunFor}" default-value=""
+     * @parameter expression="${jstd.dryRunFor}" default-value=""
      */
     private String dryRunFor;
 
     /**
-     * @parameter expression="${jsTestDriver.plugins}" default-value=""
+     * @parameter expression="${jstd.plugins}" default-value=""
      */
     private String plugins;
 
     /**
-     * @parameter expression="${jsTestDriver.port}" default-value=""
+     * @parameter expression="${jstd.port}" default-value=""
      */
     private String port;
 
     /**
-     * @parameter expression="${jsTestDriver.preloadFiles}" default-value=false
+     * @parameter expression="${jstd.preloadFiles}" default-value=false
      */
     private boolean preloadFiles;
 
     /**
-     * @parameter expression="${jsTestDriver.requiredBrowsers}" default-value=""
+     * @parameter expression="${jstd.requiredBrowsers}" default-value=""
      */
     private String requiredBrowsers;
 
     /**
-     * @parameter expression="${jsTestDriver.reset}" default-value=false
+     * @parameter expression="${jstd.reset}" default-value=false
      */
     private boolean reset;
 
     /**
-     * @parameter expression="${jsTestDriver.runnerMode}" default-value=""
+     * @parameter expression="${jstd.runnerMode}" default-value=""
      */
     private String runnerMode;
 
     /**
-     * @parameter expression="${jsTestDriver.server}" default-value=""
+     * @parameter expression="${jstd.server}" default-value=""
      */
     private String server;
 
     /**
-     * @parameter expression="${jsTestDriver.serverHandlerPrefix}" default-value=""
+     * @parameter expression="${jstd.serverHandlerPrefix}" default-value=""
      */
     private String serverHandlerPrefix;
 
     /**
-     * @parameter expression="${jsTestDriver.testOutput}" default-value=""
+     * @parameter expression="${jstd.testOutput}" default-value=""
      */
     private String testOutput;
 
     /**
-     * @parameter expression="${jsTestDriver.tests}" default-value="all"
+     * @parameter expression="${jstd.tests}" default-value="all"
      */
     private String tests;
 
     /**
-     * @parameter expression="${jsTestDriver.verbose}" default-value=false
+     * @parameter expression="${jstd.verbose}" default-value=false
      */
     private boolean verbose;
 

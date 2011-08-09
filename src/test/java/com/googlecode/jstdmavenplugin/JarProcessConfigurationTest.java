@@ -1,5 +1,6 @@
-package com.google.jstestdriver;
+package com.googlecode.jstdmavenplugin;
 
+import com.googlecode.jstdmavenplugin.JarProcessConfiguration;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package com.google.jstestdriver;
+package com.googlecode.jstdmavenplugin;
 
 import java.io.File;
 

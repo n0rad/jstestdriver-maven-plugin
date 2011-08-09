@@ -1,5 +1,6 @@
-package com.google.jstestdriver;
+package com.googlecode.jstdmavenplugin;
 
+import com.googlecode.jstdmavenplugin.ArtifactLocator;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.project.MavenProject;
 import static org.mockito.Mockito.mock;
