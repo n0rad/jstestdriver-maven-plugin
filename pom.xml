@@ -5,9 +5,15 @@
     <name>JsTestDriver Maven Plugin</name>
     <groupId>com.googlecode.jstd-maven-plugin</groupId>
     <artifactId>jstd-maven-plugin</artifactId>
-    <version>1.3.2.5</version>
+    <version>1.3.2.5-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
     <url>http://code.google.com/jstd-maven-plugin</url>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
 
     <licenses>
         <license>
@@ -16,10 +22,13 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
     <scm>
         <url>https://code.google.com/p/jstd-maven-plugin/</url>
-        <connection>https://code.google.com/p/jstd-maven-plugin/</connection>
+        <connection>scm:git:https://code.google.com/p/jstd-maven-plugin/</connection>
+        <developerConnection>scm:git:https://code.google.com/p/jstd-maven-plugin/</developerConnection>
     </scm>
+    
     <developers>
         <developer>
             <id>burke.webster</id>
@@ -45,9 +54,9 @@
             <version>2.5</version>
         </dependency>
         <dependency>
-            <groupId>com.google.jstestdriver</groupId>
-            <artifactId>jstestdriver</artifactId>
-            <version>${jstd.version}</version>
+            <groupId>com.googlecode.jstd-maven-plugin</groupId>
+            <artifactId>jstestdriver-jar</artifactId>
+            <version>${jstd.version}-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -63,11 +72,6 @@
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-project</artifactId>
             <version>${maven.plugin.dev.api.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jvnet.wagon-svn</groupId>
-            <artifactId>wagon-svn</artifactId>
-            <version>1.8</version>
         </dependency>
 
         <!-- test deps -->
@@ -93,13 +97,6 @@
     </dependencies>
 
     <build>
-        <extensions>
-            <extension>
-                <groupId>org.jvnet.wagon-svn</groupId>
-                <artifactId>wagon-svn</artifactId>
-                <version>1.8</version>
-            </extension>
-        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -113,32 +110,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <!-- will need to remove these in order to publish to central repo -->
-    <repositories>
-        <repository>
-            <id>maven2-repository.dev.java.net</id>
-            <name>Java.net Repository for Maven</name>
-            <url>http://download.java.net/maven/2/</url>
-        </repository>
-        <repository>
-            <id>jstd-maven-plugin-repo</id>
-            <name>jstd maven plugin repo</name>
-            <url>http://jstd-maven-plugin.googlecode.com/svn/maven2</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>jstd-maven-plugin-repo</id>
-            <url>svn:https://jstd-maven-plugin.googlecode.com/svn/maven2</url>
-        </repository>
-        <snapshotRepository>
-            <uniqueVersion>true</uniqueVersion>
-            <id>jstd-maven-plugin-repo</id>
-            <url>svn:https://jstd-maven-plugin.googlecode.com/svn/maven2</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>
