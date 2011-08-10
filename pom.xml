@@ -54,9 +54,9 @@
             <version>2.5</version>
         </dependency>
         <dependency>
-            <groupId>com.googlecode.jstd-maven-plugin</groupId>
-            <artifactId>jstestdriver-jar</artifactId>
-            <version>${jstd.version}-SNAPSHOT</version>
+            <groupId>com.google.jstestdriver</groupId>
+            <artifactId>jstestdriver</artifactId>
+            <version>${jstd.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
