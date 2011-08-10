@@ -57,6 +57,7 @@
             <groupId>com.google.jstestdriver</groupId>
             <artifactId>jstestdriver</artifactId>
             <version>${jstd.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
