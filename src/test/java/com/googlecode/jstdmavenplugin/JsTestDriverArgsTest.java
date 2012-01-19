@@ -1,20 +1,17 @@
 package com.googlecode.jstdmavenplugin;
 
+import static com.googlecode.jstdmavenplugin.matchers.ExecutorCalledWithMatcher.wasCalledWith;
+import static com.googlecode.jstdmavenplugin.matchers.ExecutorNotCalledWithMatcher.wasNotCalledWith;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
 import org.apache.maven.project.MavenProject;
 import org.mockito.ArgumentCaptor;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static com.googlecode.jstdmavenplugin.matchers.ExecutorCalledWithMatcher.wasCalledWith;
-import static com.googlecode.jstdmavenplugin.matchers.ExecutorNotCalledWithMatcher.wasNotCalledWith;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 /**
  * Copyright 2009-2011, Burke Webster (burke.webster@gmail.com)
-
+ * 
  * This test should verify all command line arguments that JsTestDriver provide are
  * supported in the plugin.
  */
@@ -70,7 +67,10 @@ public class JsTestDriverArgsTest extends AbstractMojoTest {
         String path = "path/to/config.txt";
         setField(mojo, "config", path);
         mojo.execute();
-        assertThat(executor, wasCalledWith(projessConfigArgCaptor, String.format("--config %s/%s", basedir.getAbsolutePath(), path)));
+        assertThat(
+                executor,
+                wasCalledWith(projessConfigArgCaptor,
+                        String.format("--config %s/%s", basedir.getAbsolutePath(), path)));
     }
 
     public void shouldPassAlongAbsoluteConfig() throws Exception {
@@ -86,11 +86,11 @@ public class JsTestDriverArgsTest extends AbstractMojoTest {
         assertThat(executor, wasCalledWith(projessConfigArgCaptor, "--dryRunFor PersonTest"));
     }
 
-    public void shouldPassAlongPluginsIfProvided() throws Exception {
-        setField(mojo, "plugins", "plugin1,plugin2");
-        mojo.execute();
-        assertThat(executor, wasCalledWith(projessConfigArgCaptor, "--plugins plugin1,plugin2"));
-    }
+    //    public void shouldPassAlongPluginsIfProvided() throws Exception {
+    //        setField(mojo, "plugins", "plugin1,plugin2");
+    //        mojo.execute();
+    //        assertThat(executor, wasCalledWith(projessConfigArgCaptor, "--plugins plugin1,plugin2"));
+    //    }
 
     public void shouldPassAlongPortIfProvided() throws Exception {
         setField(mojo, "port", "9876");

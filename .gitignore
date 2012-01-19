@@ -1,2 +1,4 @@
-*.i*
-target
+target/
+.classpath
+.project
+.settings/

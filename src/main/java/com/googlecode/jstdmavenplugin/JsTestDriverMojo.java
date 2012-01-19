@@ -1,18 +1,18 @@
 package com.googlecode.jstdmavenplugin;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.common.base.Strings;
 
 /**
  * Copyright 2009-2011, Burke Webster (burke.webster@gmail.com)
- *
+ * 
  * @requiresDependencyResolution test
  * @goal test
  * @phase test
@@ -43,7 +43,7 @@ public class JsTestDriverMojo extends AbstractMojo {
     private String artifactId;
 
     /**
-     * @parameter expression="${jstd.groupdId}" default-value="com.google.jstestdriver"
+     * @parameter expression="${jstd.groupdId}" default-value="net.awired.com.googlecode.jstestdriver"
      */
     private String groupId;
 
@@ -59,16 +59,14 @@ public class JsTestDriverMojo extends AbstractMojo {
 
     /**
      * Should we default in the basePath if none is specified? Defaults to true.
-     *
+     * 
      * @parameter expression="${jstd.defaultBasePath}" default-value="true"
      */
     private boolean defaultBasePath;
 
-    
-
     /**
      * JsTD Options:
-     *   These should be kept in step with the JsTD command line options.
+     * These should be kept in step with the JsTD command line options.
      */
 
     /**
@@ -92,7 +90,7 @@ public class JsTestDriverMojo extends AbstractMojo {
     private boolean captureConsole;
 
     /**
-     * @parameter expression="${jstd.config}" default-value="src/test/resources/jsTestDriver.conf"
+     * @parameter expression="${jstd.config}" default-value="jsTestDriver.conf"
      */
     private String config;
 
@@ -142,7 +140,7 @@ public class JsTestDriverMojo extends AbstractMojo {
     private String serverHandlerPrefix;
 
     /**
-     * @parameter expression="${jstd.testOutput}" default-value=""
+     * @parameter expression="${jstd.testOutput}" default-value="${project.build.directory}/jstd"
      */
     private String testOutput;
 
@@ -155,7 +153,6 @@ public class JsTestDriverMojo extends AbstractMojo {
      * @parameter expression="${jstd.verbose}" default-value=false
      */
     private boolean verbose;
-
 
     // internals
     private ProcessExecutor processExecutor;
@@ -170,6 +167,7 @@ public class JsTestDriverMojo extends AbstractMojo {
         this.resultsProcessor = resultsProcessor;
     }
 
+    @Override
     public void execute() throws MojoExecutionException {
         MojoLogger.bindLog(getLog());
 
@@ -186,8 +184,7 @@ public class JsTestDriverMojo extends AbstractMojo {
         resultsProcessor.processResults(processExecutor.execute(config));
     }
 
-    private ProcessConfiguration buildProcessConfiguration()
-            throws MojoExecutionException {
+    private ProcessConfiguration buildProcessConfiguration() throws MojoExecutionException {
         ProcessConfiguration configuration;
         if (StringUtils.isNotEmpty(jar)) {
             configuration = buildLocalJarProcessConfig();
@@ -201,7 +198,15 @@ public class JsTestDriverMojo extends AbstractMojo {
     }
 
     private ProcessConfiguration buildMavenJarProcessConfig() throws MojoExecutionException {
-        Artifact artifact = new ArtifactLocator(mavenProject).findArtifact(groupId, artifactId);
+        Artifact artifact = null;
+        for (Artifact current : dependencies) {
+            if (current.getArtifactId().equals(artifactId) && current.getGroupId().equals(groupId)) {
+                artifact = current;
+            }
+        }
+        if (artifact == null) {
+            artifact = new ArtifactLocator(mavenProject).findArtifact(groupId, artifactId);
+        }
         JarProcessConfiguration jarConfig = new JarProcessConfiguration(artifact.getFile().getAbsolutePath());
         addClasspathArguments(jarConfig);
         if (StringUtils.isNotEmpty(jvmOpts)) {
@@ -227,9 +232,8 @@ public class JsTestDriverMojo extends AbstractMojo {
         jarConfig.addClasspath(StringUtils.join(classpathArgs, ";"));
     }
 
-    private void buildArguments(JarProcessConfiguration testRunner)
-            throws MojoExecutionException {
-        String defaultedBasePath = StringUtils.defaultIfEmpty(basePath, mavenProject.getBasedir().getAbsolutePath()); 
+    private void buildArguments(JarProcessConfiguration testRunner) throws MojoExecutionException {
+        String defaultedBasePath = StringUtils.defaultIfEmpty(basePath, mavenProject.getBasedir().getAbsolutePath());
         if (config != null) {
             File configFile = new File(config);
             if (!configFile.isAbsolute()) {
@@ -246,7 +250,16 @@ public class JsTestDriverMojo extends AbstractMojo {
         }
         if (StringUtils.isNotEmpty(browser)) {
             testRunner.addArgument("--browser", browser);
+        } else {
+            String run = "xdg-open";
+            if (Os.isMac()) {
+                run = "open";
+            } else if (Os.isWindows()) {
+                run = "\"%ProgramFiles%\\Internet Explorer\\iexplore.exe\"";
+            }
+            testRunner.addArgument("--browser", run);
         }
+
         if (StringUtils.isNotEmpty(browserTimeout)) {
             testRunner.addArgument("--browserTimeout", browserTimeout);
         }
@@ -257,9 +270,26 @@ public class JsTestDriverMojo extends AbstractMojo {
         if (StringUtils.isNotEmpty(dryRunFor)) {
             testRunner.addArgument("--dryRunFor", dryRunFor);
         }
-        if (StringUtils.isNotEmpty(plugins)) {
-            testRunner.addArgument("--plugins", plugins);
+
+        if (!Os.isWindows()) {
+            for (Artifact current : dependencies) {
+                if (current.getArtifactId().equals("coverage") && current.getGroupId().equals(groupId)) {
+                    String absolutePath = current.getFile().getAbsolutePath();
+                    int numberOfDir = 0;
+                    for (int i = 0; i < absolutePath.length(); i++) {
+                        char c = '/';
+                        if (Os.isWindows()) {
+                            c = '\\';
+                        }
+                        if (absolutePath.charAt(i) == c) {
+                            numberOfDir++;
+                        }
+                    }
+                    testRunner.addArgument("--plugins", Strings.repeat("../", numberOfDir) + absolutePath);
+                }
+            }
         }
+
         if (StringUtils.isNotEmpty(port)) {
             testRunner.addArgument("--port", port);
         }
@@ -295,14 +325,13 @@ public class JsTestDriverMojo extends AbstractMojo {
 
     private void logProcessArguments(ProcessConfiguration processConfiguration) {
         if (verbose) {
-            System.out.println(String.format("Running: %s", StringUtils.join(processConfiguration.getFullCommand(), " ")));
+            System.out.println(String.format("Running: %s",
+                    StringUtils.join(processConfiguration.getFullCommand(), " ")));
         }
     }
 
     private void printBanner() {
-        System.out.println("\n" +
-                "-------------------------------------------\n" +
-                " J S  T E S T  D R I V E R                 \n" +
-                "-------------------------------------------\n");
+        System.out.println("\n" + "-------------------------------------------\n"
+                + " J S  T E S T  D R I V E R                 \n" + "-------------------------------------------\n");
     }
 }
