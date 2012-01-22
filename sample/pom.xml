@@ -10,10 +10,9 @@
 
 	<properties>
 		<sonar.language>js</sonar.language>
-		<sonar.dynamicAnalysis>false</sonar.dynamicAnalysis>
+<!-- 		<sonar.dynamicAnalysis>false</sonar.dynamicAnalysis> -->
 		<sonar.javascript.lslint.jstestdriverfolder>jstd</sonar.javascript.lslint.jstestdriverfolder>		
 	</properties>
-
 
 	<build>
 		<sourceDirectory>src/main/webapp/js</sourceDirectory>
@@ -37,7 +36,7 @@
 				<version>0.1-SNAPSHOT</version>
 				<configuration>
 					<verbose>true</verbose>
-					<port>42442</port>
+					<port>42443</port>
 				</configuration>
 				<executions>
 					<execution>

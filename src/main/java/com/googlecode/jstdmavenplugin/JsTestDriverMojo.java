@@ -254,8 +254,8 @@ public class JsTestDriverMojo extends AbstractMojo {
             String run = "xdg-open";
             if (Os.isMac()) {
                 run = "open";
-            } else if (Os.isWindows()) {
-                run = "\"%ProgramFiles%\\Internet Explorer\\iexplore.exe\"";
+                //            } else if (Os.isWindows()) {
+                //                run = "\"%ProgramFiles%\\Internet Explorer\\iexplore.exe\"";
             }
             testRunner.addArgument("--browser", run);
         }
