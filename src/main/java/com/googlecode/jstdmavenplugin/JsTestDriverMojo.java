@@ -105,6 +105,11 @@ public class JsTestDriverMojo extends AbstractMojo {
     private String plugins;
 
     /**
+     * @parameter expression="${jstd.coverage}" default-value="true"
+     */
+    private boolean coverage;
+
+    /**
      * @parameter expression="${jstd.port}" default-value=""
      */
     private String port;
@@ -271,7 +276,7 @@ public class JsTestDriverMojo extends AbstractMojo {
             testRunner.addArgument("--dryRunFor", dryRunFor);
         }
 
-        if (!Os.isWindows()) {
+        if (!Os.isWindows() && coverage) {
             for (Artifact current : dependencies) {
                 if (current.getArtifactId().equals("coverage") && current.getGroupId().equals(groupId)) {
                     String absolutePath = current.getFile().getAbsolutePath();

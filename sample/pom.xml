@@ -37,6 +37,7 @@
 				<configuration>
 					<verbose>true</verbose>
 					<port>42443</port>
+					<coverage>true</coverage>
 				</configuration>
 				<executions>
 					<execution>
