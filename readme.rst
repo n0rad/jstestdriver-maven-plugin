@@ -1,5 +1,5 @@
 **I'm not working on this project anymore as jstestdriver is limited
-I have stared another project which support more things** : https://github.com/awired/jstest-maven-plugin
+I have started another project which support more things** : https://github.com/awired/jstest-maven-plugin
 
 
 
